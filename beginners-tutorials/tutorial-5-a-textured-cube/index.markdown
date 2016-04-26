@@ -23,15 +23,15 @@ In this tutorial, you will learn :
 
 When texturing a mesh, you need a way to tell to OpenGL which part of the image has to be used for each triangle. This is done with UV coordinates.
 
-Each vertex can have, on top of its position, a couple of floats, U and V. These coordinates are used to access the texture, in the following way :
+Each vertex can have, in addition to its position, a couple of extra float coordinates, U and V. These coordinates are used to access the texture, in the following way:
 
 ![]({{site.baseurl}}/assets/images/tuto-5-textured-cube/UVintro.png)
 
-Notice how the texture is distorted on the triangle.
+Notice how the texture is distorted on the triangle. If you draw a mesh using its (u,v) coordinates for the (x,y) position on the screen, what you get is the so-called _UV map_ which describes how the texture image should be "pasted" or "painted" onto the 3-D model.
 
 # Loading .BMP images yourself
 
-Knowing the BMP file format is not crucial : plenty of libraries can load BMP files for you. But it's very simple and can help you understand how things work under the hood. So we'll write a BMP file loader from scratch, so that you know how it works, <span style="text-decoration: underline;">and never use it again</span>.
+There are several file formats for images, one of them being the old format BMP from Microsoft Windows. Knowing the BMP file format is not important: plenty of libraries can load BMP files for you. However, it's very simple to do it, and it can help you understand how things work under the hood. So we'll write a BMP file loader from scratch, so that you know how loading pixels from a file works, <span style="text-decoration: underline;">and then probably never use it again</span>.
 
 Here is the declaration of the loading function :
 
@@ -39,15 +39,13 @@ Here is the declaration of the loading function :
 GLuint loadBMP_custom(const char * imagepath);
 ```
 
-so it's used like this :
+and its intended use looks like this :
 
 ``` cpp
 GLuint image = loadBMP_custom("./my_texture.bmp");
 ```
 
-Let's see how to read a BMP file, then.
-
-First, we'll need some data. These variable will be set when reading the file.
+Let's see how to read a BMP file, then. First, we'll need some variables to store information on the image size, and of course a place to store pixel data. These variables will be set when reading the file.
 
 ``` cpp
 // Data read from the header of the BMP file
@@ -59,7 +57,7 @@ unsigned int imageSize;   // = width*height*3
 unsigned char * data;
 ```
 
-We now have to actually open the file
+We now have to actually open the file for reading. It's a binary file, not a text file, hence the "rb" mode.
 
 ``` cpp
 // Open the file
@@ -67,7 +65,7 @@ FILE * file = fopen(imagepath,"rb");
 if (!file){printf("Image could not be opened\n"); return 0;}
 ```
 
-The first thing in the file is a 54-bytes header. It contains information such as "Is this file really a BMP file?", the size of the image, the number of bits per pixel, etc. So let's read this header :
+The first thing in a BMP file is a 54-byte header. It contains information such as "Is this file really a BMP file?", the size of the image, the number of bits per pixel, etc. So let's read this header :
 
 ``` cpp
 if ( fread(header, 1, 54, file)!=54 ){ // If not 54 bytes read : problem
@@ -76,7 +74,7 @@ if ( fread(header, 1, 54, file)!=54 ){ // If not 54 bytes read : problem
 }
 ```
 
-The header always begins by BM. As a matter of fact, here's what you get when you open a .BMP file in a hexadecimal editor :
+The header always begins with the two ASCII characters BM, which is a reasonably safe indication that this is indeed a BMP file. As a matter of fact, here's what you get when you open a .BMP file in a hexadecimal editor :
 
 ![]({{site.baseurl}}/assets/images/tuto-5-textured-cube/hexbmp.png)
 
