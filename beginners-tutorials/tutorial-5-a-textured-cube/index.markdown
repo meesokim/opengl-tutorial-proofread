@@ -320,9 +320,9 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 glGenerateMipmap(GL_TEXTURE_2D);
 ```
 
-# How to load texture with GLFW
+# How (not) to load a texture with GLFW
 
-Our loadBMP_custom function is great because we made it ourselves, but using a dedicated library is better. GLFW version 2 could do that, but only for TGA files, and this feature has been removed in GLFW version 3, but here's how it could be done:
+Our loadBMP_custom function is great because we made it ourselves, but using a dedicated library is better. GLFW version 2 could do that, but only for TGA files, and the feature was removed in GLFW version 3 for good reasons, but here's how it could be done:
 
 ``` cpp
 GLuint loadTGA_glfw(const char * imagepath){
@@ -349,7 +349,7 @@ GLuint loadTGA_glfw(const char * imagepath){
 }
 ```
 
-Note that the code above won't work in GLFW 3, but you get the idea. The function looked and worked more or less the same as our own BMP loading function, only it could be told to send the data to OpenGL straight away.
+Note that the code above won't work in GLFW 3, but you get the idea. The function looked and worked more or less the same as our own BMP loading function, only it could be told to send the data to OpenGL straight away. Image loading functions in _libjpeg_ and _libpng_ work in a similar fashion: you give them a file name, and you get back information on the image size and a pointer to pixel data.
 
 # Compressed Textures
 
