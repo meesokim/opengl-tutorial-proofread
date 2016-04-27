@@ -91,7 +91,7 @@ We can make our code compute the angles from the absolute cursor position, but a
 
 ``` cpp
 glfwGetMousePos(&xpos, &ypos);
-glfwsetMousePos(0,0);
+glfwSetMousePos(0,0);
 // Compute new orientation
 horizontalAngle += mouseSpeed * (float)xpos;
 verticalAngle   += mouseSpeed * (float)ypos;
